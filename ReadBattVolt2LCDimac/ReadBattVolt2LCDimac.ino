@@ -104,7 +104,6 @@ void loop()
     prevAvg = newAvg;
   } // end if changed
 
-  if (voltage <= 10500 && toning == 0)  // disch target activates toning
   {
     OneMsTaskTimer::add(&myToner); // with period as initialized
     OneMsTaskTimer::start();
