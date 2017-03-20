@@ -77,7 +77,7 @@ void loop()
   // these vals seem to work from USB or ext 5v from VR powered from batt
  // voltage = map(newAvg,1506,3979,1518,4014); // in mV, resolves ~5 mV [for 47--10 Ω set]
   // map(newAvg, 875, 3198, 3472, 12680)  [for 22--10 ohm set]
- voltage = map(newAvg,1126,3746,3611,12020);
+ voltage = map(newAvg,1524,3599,1836,4340);
 
   // print new values to LCD and serial, if different and 3 sec have elapsed
   if (round(newAvg) != round(prevAvg) && count == 1)
