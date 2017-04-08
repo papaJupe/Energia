@@ -1,7 +1,7 @@
 
 /*
   ReadBattVolt2LCD - for rough batt monitor while discharge w/ volt divider, with msp 6989
-  with LCD on board; map input to 3.5-13 v range, tone when some target reached,
+  with LCD board; map input to 3.5-13 v range, tone when some target reached,
   can output strings to Proc_.exe for remote monitor
 
   old ardu Uses: Liquid Crystal 8x2 display, map, analRead, expon moving average, round, toner
@@ -19,7 +19,7 @@ LCD_LAUNCHPAD myLCD;
 #include <OneMsTaskTimer.h>  // enables a slow task to repeat outside 
 // of loop & not slow it; used here for toning
 
-#define PinIn A14      // analog In A14 for 47-47, A11 for 22-10, A10 for 47-x set
+#define PinIn A14      // analog In A14 =30 = 
 
 // float newAvg;
 // float prevAvg;
@@ -27,7 +27,7 @@ LCD_LAUNCHPAD myLCD;
 // int mapAvg;
 
 boolean toning = 0;  // whether target reached and toning has started
-boolean status = 1;  // whether to play tone or not
+boolean toneOn = 1;  // whether to play tone or not
 
 void toneOnOff();
 OneMsTaskTimer_t myToner = {1000, toneOnOff, 0, 0}; // after start, fx repeats every 1 sec
@@ -62,7 +62,7 @@ void setup()
 
 void loop()
 {
-  static int count = 0; // to print w/ interval
+  static int count = 0; // to slow printing to every x sec.
   myLCD.showSymbol(LCD_SEG_RADIO, 1);
   //  myLCD.showSymbol(LCD_SEG_TX, 1);
   myLCD.showSymbol(LCD_SEG_RX, 1);
@@ -73,13 +73,13 @@ void loop()
   delay(10);
   float newAvg = (sensorV * 0.2 + prevAvg * 0.8); // update expon moving average of AR
 
-  // Convert the analog reading (which goes from 0 - 4095) to batt voltage (3500-13000mV):
-  // these vals seem to work from USB or ext 5v from VR powered from batt
+  // Convert the analog reading (which goes from 0 - 4095) to batt voltage (whatever_mV):
+  // these vals seem to work from USB or ext 5v from VR / batt
  // voltage = map(newAvg,1506,3979,1518,4014); // in mV, resolves ~5 mV [for 47--10 Ω set]
-  // map(newAvg, 875, 3198, 3472, 12680)  [for 22--10 ohm set]
- voltage = map(newAvg,1524,3599,1836,4340);
+ 
+ voltage = map(newAvg,1460,3769,1720,4457);
 
-  // print new values to LCD and serial, if different and 3 sec have elapsed
+  // print new values to LCD and serial, if different and x sec have elapsed
   if (round(newAvg) != round(prevAvg) && count == 1)
   {
     myLCD.clear();
@@ -113,15 +113,15 @@ void loop()
 
   count++ == 1;
   if (count == 20) count = 0;  // recycle count every x sec
-  delay (40);   // ten loops / second
+  delay (40);   // ten loops / second from all delays
 }  // end loop
 
 void toneOnOff()
 {
-  if (status) tone(15, 2500);   // don't need pin config for toner
+  if (toneOn) tone(15, 2500);   // don't need pin config for toner
   else noTone(15);  // same as P1_6
-  // status ^= 0x0001; // bitwise exclusive OR, inverts value on alternate calls
-  status = !status; // tone on/off on alternate calls
+  // toneOn ^= 0x0001; // bitwise exclusive OR, inverts value on alternate calls
+  toneOn = !toneOn; // tone on/off on alternate calls
 }
 
 // for serial output to Proc sketch
