@@ -2,7 +2,7 @@
 /*
   ReadBattVolt2LCD - for batt volt monitor while discharge w/ volt divider on
   msp 6989 with onboard LCD; map input to [some V.] range, tone when some
-  target reached, can output strings to Proc_.ino for remote monitor over USB
+  target reached, can output strings to Proc_.pde for remote monitor over USB
   or Bluetooth module on serial I/O of MSP
 
   old ardu Used: Liquid Crystal 8x2 display, map, analRead, expon moving
