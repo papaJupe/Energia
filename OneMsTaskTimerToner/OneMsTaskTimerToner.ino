@@ -11,7 +11,7 @@
 
 */ 
 
-#include "OneMsTaskTimer.h"
+#include "OneMsTaskTimer.h"  // libs in __.app/contents/java/libraries
 
 const int heartbeatPin = RED_LED;  // onboard lite
 byte status = 0;  // def as global, not sure it has to be
