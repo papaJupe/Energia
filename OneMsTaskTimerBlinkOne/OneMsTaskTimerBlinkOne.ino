@@ -11,7 +11,7 @@
 
 #include "OneMsTaskTimer.h"  // libs in __.app/contents/java/libraries
 
-const int heartbeatPin = RED_LED;  // onboard lite
+const int litePin = RED_LED;  // onboard lite
 byte status = 0;  // def as global, not sure it has to be
 void flash();  // compile fails unless fx declared in advance of use
 
@@ -23,14 +23,14 @@ void flash();  // compile fails unless fx declared in advance of use
    Parameter 2: pointer to function called by the task (name of fx)
    Parameter 3: init 0 - only used internally  (so why have it at all?)
    Parameter 4: init 0 - only used internally
-   following task calls the flash fx every 1 sec; it alternately turns lite on and off
+   this task calls the flash fx every 1/2 sec; alternately turns lite on / off
 */
 
 OneMsTaskTimer_t myTask = {500, flash, 0, 0};
 
 void setup()
 {
-  pinMode(heartbeatPin, OUTPUT);
+  pinMode(litePin, OUTPUT);
   OneMsTaskTimer::add(&myTask); // with period as initialized
   OneMsTaskTimer::start();
 }
@@ -42,18 +42,19 @@ void loop()
 // interrupt handler 'passed to OneMsTaskTimer' (vs.'called by object')
 void flash()
 {
-  if (status % 9 < 7) // mostly high state, lite ON
+  if (status % 9 < 6) // mostly high state, 6 of 9 cnts--> lite ON
   {
-    digitalWrite(heartbeatPin, HIGH);
+    digitalWrite(litePin, HIGH);
   } else
   {
-    digitalWrite(heartbeatPin, LOW);
+    digitalWrite(litePin, LOW);
   }
   // status ^= 0x0001; // bitwise exclusive OR, so inverts value,
-  // obscure method but works
+  // obscure method but works, I have no reason to invert tho
+  
   status++;  // I wanted unequal intervals to observe code actions
-  if (status > 28)
-  { digitalWrite(heartbeatPin, LOW);  // turn lite off and stop task
+  if (status > 28)  // flashes 3 times slow, one fast then stops
+  { digitalWrite(litePin, LOW);  // turn lite off and stop task
     // OneMsTaskTimer::stop(); // to stop this task or all?
     OneMsTaskTimer::remove(&myTask); // just suspends this one? Y
   }  // end if
