@@ -9,10 +9,10 @@
   average, round, toner
   new energia Uses: launchpad LCD, displayText, showSymbol, OneMsTaskTimer
   for delayed toning without slowing loop
-*/
 
-/*  include the library and init for msp w/ LCD (display details in mod_.cpp)
-     ! IDE must select 6989 LCD board for code to compile !  */
+  include the library and init for msp w/ LCD (display details in mod_.cpp)
+     ! IDE must select 6989 LCD board for code to compile !  
+*/
 
 #include "LCD_Launchpad.h"  // libs in __.app/contents/java/libraries
 
@@ -38,7 +38,6 @@ OneMsTaskTimer_t myToner = {1000, toneOnOff, 0, 0}; // after start,
 //  fx repeats every 1 sec
 
 unsigned long starTime;  // starting time for discharge, msec, (global)
-
 
 void setup()
 {
